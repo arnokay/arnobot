@@ -1,0 +1,9 @@
+[submodule "auth"]
+	path = auth
+	url = git@github.com:arnokay/arnobot-auth.git
+[submodule "shared"]
+	path = shared
+	url = git@github.com:arnokay/arnobot-shared.git
+[submodule "twitch"]
+	path = twitch
+	url = git@github.com:arnokay/arnobot-twitch.git
