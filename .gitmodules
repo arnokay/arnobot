@@ -10,3 +10,9 @@
 [submodule "core"]
 	path = core
 	url = git@github.com:arnokay/arnobot-core.git
+[submodule "front"]
+	path = front
+	url = git@github.com:arnokay/arnobot-front.git
+[submodule "kick"]
+	path = kick
+	url = git@github.com:arnokay/arnobot-kick.git
