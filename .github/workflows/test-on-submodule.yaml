@@ -1,0 +1,13 @@
+name: Test on Submodule change
+
+on:
+  push:
+    paths:
+      - 'auth/**'
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello 👋
+        run: echo "Hello! A submodule folder changed."
