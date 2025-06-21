@@ -1,8 +1,8 @@
 # TODO
 
-[ ] - add whitelist
-[ ] - handle todo's
-[ ] - add kick
+- [ ] add whitelist
+- [ ] handle todo's
+- [ ] add kick
 
 # steps for local deploy
 
@@ -48,4 +48,4 @@ atlas migrate apply --local
 ---
 
 missing steps:
-[] setting up default bots (by first login or something like this)
+- [ ] setting up default bots (by first login or something like this)
