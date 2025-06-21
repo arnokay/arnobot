@@ -1,0 +1,111 @@
+name: arnobot
+
+services:
+  auth:
+    image: ghcr.io/arnokay/arnobot-auth:nightly
+    container_name: arnobot-auth
+    restart: unless-stopped
+    env_file: ".env.auth"
+    ports:
+      - "${AUTH_PORT:-3000}:8080"
+    networks:
+      - arnobot-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+
+  core:
+    image: ghcr.io/arnokay/arnobot-core:nightly
+    container_name: arnobot-core
+    restart: unless-stopped
+    env_file: ".env.core"
+    ports:
+      - "${CORE_PORT:-3001}:8080"
+    networks:
+      - arnobot-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+
+  twitch:
+    image: ghcr.io/arnokay/arnobot-twitch:nightly
+    container_name: arnobot-twitch
+    restart: unless-stopped
+    env_file: ".env.twitch"
+    ports:
+      - "${TWITCH_PORT:-3002}:8080"
+    networks:
+      - arnobot-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+
+  postgresql:
+    image: postgres:17-alpine
+    container_name: arnobot-postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: arnobot
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - arnobot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d arnobot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+
+  nats:
+    image: nats:2.11-alpine
+    container_name: arnobot-nats
+    restart: unless-stopped
+    command:
+      - "--http_port"
+      - "${NATS_HTTP_PORT:-8222}"
+      - "--jetstream"
+      - "--store_dir=/data"
+    volumes:
+      - nats_data:/data
+    ports:
+      - "${NATS_PORT:-4222}:4222"
+      - "${NATS_HTTP_PORT:-8222}:8222"
+    networks:
+      - arnobot-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://nats:8222/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  arnobot-network:
+    driver: bridge
+    name: arnobot-network
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${POSTGRES_DATA_PATH:?POSTGRES_DATA_PATH environment variable is required}
+  nats_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${NATS_DATA_PATH:?NATS_DATA_PATH environment variable is required}
