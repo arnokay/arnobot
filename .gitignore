@@ -1,4 +1,2 @@
-.env
-.env.auth
-.env.twitch
-.env.core
+.env*
+!.env*example
