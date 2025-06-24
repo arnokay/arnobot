@@ -45,6 +45,19 @@ services:
         condition: service_healthy
       nats:
         condition: service_healthy
+  
+  api:
+    image: ghcr.io/arnokay/arnobot-api:nightly
+    container_name: arnobot-api
+    restart: unless-stopped
+    env_file: ".env.api"
+    ports:
+      - "${TWITCH_PORT:-3003}:8080"
+    networks:
+      - arnobot-network
+    depends_on:
+      nats:
+        condition: service_healthy
 
   postgresql:
     image: postgres:17-alpine
