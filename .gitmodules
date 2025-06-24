@@ -16,3 +16,6 @@
 [submodule "kick"]
 	path = kick
 	url = git@github.com:arnokay/arnobot-kick.git
+[submodule "api"]
+	path = api
+	url = git@github.com:arnokay/arnobot-api.git
