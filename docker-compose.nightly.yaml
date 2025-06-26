@@ -46,6 +46,21 @@ services:
       nats:
         condition: service_healthy
   
+  kick:
+    image: ghcr.io/arnokay/arnobot-kick:nightly
+    container_name: arnobot-kick
+    restart: unless-stopped
+    env_file: ".env.twitch"
+    ports:
+      - "${TWITCH_PORT:-3003}:8080"
+    networks:
+      - arnobot-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+  
   api:
     image: ghcr.io/arnokay/arnobot-api:nightly
     container_name: arnobot-api
