@@ -50,7 +50,7 @@ services:
     image: ghcr.io/arnokay/arnobot-kick:nightly
     container_name: arnobot-kick
     restart: unless-stopped
-    env_file: ".env.twitch"
+    env_file: ".env.kick"
     ports:
       - "${KICK_PORT:-3003}:8080"
     networks:
