@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
     env_file: ".env.twitch"
     ports:
-      - "${TWITCH_PORT:-3003}:8080"
+      - "${KICK_PORT:-3003}:8080"
     networks:
       - arnobot-network
     depends_on:
@@ -67,7 +67,7 @@ services:
     restart: unless-stopped
     env_file: ".env.api"
     ports:
-      - "${TWITCH_PORT:-3003}:8080"
+      - "${API_PORT:-3003}:8080"
     networks:
       - arnobot-network
     depends_on:
